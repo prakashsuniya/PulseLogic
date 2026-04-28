@@ -1,7 +1,0 @@
-streamlit
-yfinance
-pandas
-plotly
-smartmoneyconcepts
-streamlit-autorefresh
-requests
