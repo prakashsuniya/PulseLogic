@@ -74,6 +74,36 @@ try:
 
 except Exception as e:
     st.error(f"Waiting for Data Sync... (Note: {e})")
+    # --- 5. ENHANCED CHART ---
+    fig = go.Figure(data=[go.Candlestick(
+        x=df.index, open=df['open'], high=df['high'], 
+        low=df['low'], close=df['close'], name="Price"
+    )])
+
+    # ADD THIS: Visual markers for Structure
+    # Green Up-Arrow for Bullish, Red Down-Arrow for Bearish
+    bull_signals = structure[structure['HighLow'] == 1]
+    bear_signals = structure[structure['HighLow'] == -1]
+
+    fig.add_trace(go.Scatter(
+        x=bull_signals.index, y=bull_signals['low'] * 0.99,
+        mode='markers', marker=dict(symbol='triangle-up', size=12, color='lime'),
+        name='Bullish Structure'
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=bear_signals.index, y=bear_signals['high'] * 1.01,
+        mode='markers', marker=dict(symbol='triangle-down', size=12, color='red'),
+        name='Bearish Structure'
+    ))
+
+    fig.update_layout(
+        template="plotly_dark", 
+        height=600, 
+        xaxis_rangeslider_visible=True, # Adding this back helps mobile zooming!
+        margin=dict(l=10, r=10, t=10, b=10)
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
